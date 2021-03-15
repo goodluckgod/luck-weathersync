@@ -1,5 +1,6 @@
 local windSpeed, windDirection, weatherType, rain
 local lastWeather = "OVERCAST"
+local servertime = {h = 0, m = 0}
 
 local weatherTypes = {
  [1000] = {
@@ -247,13 +248,34 @@ local weatherTypes = {
 
 
 RegisterNetEvent('luck-weathersync:client:setWeather')
-AddEventHandler('luck-weathersync:client:setWeather', function(windSpeedd, windDirectionn, weatherTypee)
+AddEventHandler('luck-weathersync:client:setWeather', function(windSpeedd, windDirectionn, weatherTypee, clockk)
 windSpeed = windSpeedd
 windDirection = windDirectionn
 weatherType = weatherTypes[weatherTypee].type
 rain = weatherTypes[weatherTypee].rain
+local tempTable = {}
+local tempTable2 = {}
+for time in string.gmatch(clockk, "[^%s]+") do
+   table.insert(tempTable, time)
+end
+local time = tempTable[2]
+for times in  string.gmatch(time, "([^:]+)") do
+   table.insert(tempTable2, times)
+end
+servertime.h = tonumber(tempTable2[1])
+servertime.m = tonumber(tempTable2[2])
 end)
 
+local tickcount = 0
+
+
+Citizen.CreateThread(function()
+	Wait(3000)
+	while true do
+		Wait(15000)
+		NetworkOverrideClockTime(servertime.h, servertime.m, 0)
+	end
+end)
 
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
