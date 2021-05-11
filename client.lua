@@ -17,6 +17,11 @@ local weatherTypes = {
     type = "CLOUDS",
     rain = -1,
  },
+	
+[1009] = {
+    type = "CLOUDS",
+    rain = -1,
+ },
 
  [1030] = {
     type = "FOGGY",
